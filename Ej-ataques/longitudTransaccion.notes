@@ -1,0 +1,22 @@
+Supongamos que una persona quiere sacar ! 32 ether ! de una wallet.
+
+Supongamos que la address es ! 0x12345600 !
+
+Ahora, retiramos todos nuestros fondos de la wallet pero le pasamos la direccion sin los ultimos 2 ceros.
+
+La EVM calcula los datos de entrada:
+
+---------------------------------------------------------------------
+    a9059cbb = web3.sha3("transfer(address,uint256)").slice(0,10)
+    !123456!   = la direccion *sin los ultimos ceros*
+    00000020  = 32 in hexademical (0x20)
+---------------------------------------------------------------------
+
+--> "0xa9059cbb12345600000020" <-- resultado concatenado
+
+Como la longitud de la transaccion es 2 bytes más corta (4 en realidad), le agrega ceros.
+
+--> "0xa9059cbb1234560000002000" <--
+
+==> El valor del dinero a tranferir es: ! 0000002000 ! que es ! 8192 ether !
+
